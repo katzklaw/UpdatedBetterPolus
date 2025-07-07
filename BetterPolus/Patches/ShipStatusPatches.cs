@@ -62,7 +62,6 @@ public static class ShipStatusPatches
         if (IsObjectsFetched && IsRoomsFetched)
         {
             MoveVitals();
-            SwitchNavWifi();
             MoveTempCold();
         }
         else
