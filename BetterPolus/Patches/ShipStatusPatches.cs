@@ -33,12 +33,6 @@ public static class ShipStatusPatches
     public static SystemConsole Vitals;
     public static GameObject DvdScreenOffice;
 
-    // Vents Tweak
-    public static Vent ElectricBuildingVent;
-    public static Vent ElectricalVent;
-    public static Vent ScienceBuildingVent;
-    public static Vent StorageVent;
-
     // TempCold Tweak
     public static Console TempCold;
 
@@ -59,7 +53,6 @@ public static class ShipStatusPatches
 
     public static void FindPolusObjects()
     {
-        FindVents();
         FindRooms();
         FindObjects();
     }
@@ -77,42 +70,11 @@ public static class ShipStatusPatches
             BetterPolusPlugin.Logger.LogError("Couldn't move elements as not all of them have been fetched.");
         }
 
-        AdjustVents();
-
-        IsAdjustmentsDone = true;
     }
 
     // --------------------
     // - Objects Fetching -
     // --------------------
-
-    public static void FindVents()
-    {
-        var ventsList = Object.FindObjectsOfType<Vent>().ToList();
-
-        if (ElectricBuildingVent == null)
-        {
-            ElectricBuildingVent = ventsList.Find(vent => vent.gameObject.name == "ElectricBuildingVent");
-        }
-
-        if (ElectricalVent == null)
-        {
-            ElectricalVent = ventsList.Find(vent => vent.gameObject.name == "ElectricalVent");
-        }
-
-        if (ScienceBuildingVent == null)
-        {
-            ScienceBuildingVent = ventsList.Find(vent => vent.gameObject.name == "ScienceBuildingVent");
-        }
-
-        if (StorageVent == null)
-        {
-            StorageVent = ventsList.Find(vent => vent.gameObject.name == "StorageVent");
-        }
-
-        IsVentsFetched = ElectricBuildingVent != null && ElectricalVent != null && ScienceBuildingVent != null &&
-                         StorageVent != null;
-    }
 
     public static void FindRooms()
     {
@@ -184,23 +146,7 @@ public static class ShipStatusPatches
     // - Map Adjustments -
     // -------------------
 
-    public static void AdjustVents()
-    {
-        if (IsVentsFetched)
-        {
-            ElectricBuildingVent.Left = ElectricalVent;
-            ElectricalVent.Center = ElectricBuildingVent;
-
-            ScienceBuildingVent.Left = StorageVent;
-            StorageVent.Center = ScienceBuildingVent;
-        }
-        else
-        {
-            BetterPolusPlugin.Logger.LogError("Couldn't adjust Vents as not all objects have been fetched.");
-        }
-    }
-
-    public static void MoveTempCold()
+     public static void MoveTempCold()
     {
         if (TempCold.transform.position != TempColdNewPos)
         {
@@ -229,9 +175,7 @@ public static class ShipStatusPatches
             Transform navTransform = NavConsole.transform;
             navTransform.parent = Comms.transform;
             navTransform.position = NavNewPos;
-
-            // Prevents crewmate being able to do the task from outside
-            NavConsole.checkWalls = true;
+           
         }
     }
 
